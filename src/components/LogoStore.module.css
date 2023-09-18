@@ -1,0 +1,23 @@
+.logo {
+  grid-row-start: 1;
+  grid-column-start: 1;
+  grid-row-end: 2;
+  grid-column-end: 3;
+  margin: 0;
+  padding: 0;
+  align-self: center;
+}
+.maxi {
+  width: 45px;
+  height: 45px;
+}
+
+.uni {
+  width: 84px;
+  height: 32px;
+}
+
+.lidl {
+  width: 45px;
+  height: 45px;
+}

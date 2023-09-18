@@ -1,0 +1,23 @@
+.saleItemsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.angryGrid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  height: 100%;
+}
+
+.selectStoreForm {
+  padding-bottom: 1rem !important;
+}
+
+.selectStore {
+  border-radius: 1rem !important;
+}
