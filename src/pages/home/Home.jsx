@@ -6,10 +6,13 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { TextField } from "@mui/material";
 
 export default function Home() {
   const [saleItems, setSaleItems] = useState([]);
   const [store, setStore] = useState("maxi");
+  let delayTimer;
+
   useEffect(() => {
     axios
       .get(`http://127.0.0.1:3001/saleItems/${store}`)
@@ -19,23 +22,55 @@ export default function Home() {
       })
       .catch();
   }, [store]);
+
   const handleChange = (event) => {
     setStore(event.target.value);
   };
+
+  const handleChangeSearchItems = (event) => {
+    clearTimeout(delayTimer);
+
+    delayTimer = setTimeout(() => {
+      if (event.target.value === "" || event.target.value.length < 2) {
+        axios
+          .get(`http://127.0.0.1:3001/saleItems/${store}`)
+          .then((response) => {
+            setSaleItems(response.data);
+          });
+      } else {
+        axios
+          .get(
+            `http://127.0.0.1:3001/saleItems/${store}?search=${event.target.value}`
+          )
+          .then((response) => {
+            setSaleItems(response.data);
+          });
+      }
+    }, 750);
+  };
   return (
     <>
-      <FormControl className={styles.selectStoreForm} fullWidth>
-        <InputLabel>Prodavnica</InputLabel>
-        <Select
-          className={styles.selectStore}
-          value={store}
-          label="Store name"
-          onChange={handleChange}
-        >
-          <MenuItem value="maxi">Maxi</MenuItem>
-          <MenuItem value="uni">Univerexport</MenuItem>
-        </Select>
-      </FormControl>
+      <div className="test">
+        <FormControl className={styles.selectStoreForm} fullWidth>
+          <InputLabel>Prodavnica</InputLabel>
+          <Select
+            className={styles.selectStore}
+            value={store}
+            label="Store name"
+            onChange={handleChange}
+          >
+            <MenuItem value="maxi">Maxi</MenuItem>
+            <MenuItem value="uni">Univerexport</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          className={styles.textFieldSearch}
+          label="Pretraga"
+          variant="outlined"
+          onChange={handleChangeSearchItems}
+          InputProps={{ sx: { borderRadius: "1rem" } }}
+        />
+      </div>
       <div className={styles.angryGrid}>
         {saleItems.length > 0 ? (
           <>

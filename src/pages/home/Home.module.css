@@ -21,3 +21,8 @@
 .selectStore {
   border-radius: 1rem !important;
 }
+
+.textFieldSearch {
+  width: 100%;
+  padding-bottom: 1rem !important;
+}
