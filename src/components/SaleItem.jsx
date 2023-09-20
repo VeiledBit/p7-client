@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import LogoStore from "./LogoStore";
 import styles from "./SaleItem.module.css";
+import hangingSign from "../assets/hangingSign.webp"
 export default function SaleItem({
   name,
   price_sale,
@@ -45,10 +46,14 @@ export default function SaleItem({
         dateStart
       )}-${formattedDate(dateEnd)}`}</h4>
       {storeName === "maxi" ? (
-        <img
-          className={styles.item2}
-          src={`https://d2wc5be2byue2g.cloudfront.net/maxi_${match[1]}.webp`}
-        />
+        <div className={styles.item2}>
+          <img
+            className={styles.imageProduct}
+            src={`https://d2wc5be2byue2g.cloudfront.net/maxi_${match[1]}.webp`}
+          />
+          <img className={styles.imageWoodSign} src={hangingSign} />
+          <h4 className={styles.discount}>-{discount_percentage}%</h4>
+        </div>
       ) : (
         <img src="" />
       )}
@@ -60,7 +65,6 @@ export default function SaleItem({
       <h4 className={styles.item6}>
         {price_per_unit_sale}/{unit}
       </h4>
-      {/* <h4>-{discount_percentage}%</h4> */}
     </div>
   );
 }

@@ -38,6 +38,7 @@ body {
 }
 
 #root {
+  align-self: flex-start;
   width: 70vw;
 }
 
