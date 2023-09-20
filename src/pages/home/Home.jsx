@@ -7,6 +7,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { TextField } from "@mui/material";
+import baseUrl from "../../config/url";
 
 export default function Home() {
   const [saleItems, setSaleItems] = useState([]);
@@ -15,7 +16,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get(`http://127.0.0.1:3001/saleItems/${store}`)
+      .get(`${baseUrl}/saleItems/${store}`)
       .then((response) => {
         setSaleItems(response.data);
         console.log(response.data);
@@ -33,14 +34,15 @@ export default function Home() {
     delayTimer = setTimeout(() => {
       if (event.target.value === "" || event.target.value.length < 2) {
         axios
-          .get(`http://127.0.0.1:3001/saleItems/${store}`)
+          .get(`${baseUrl}/saleItems/${store}`)
           .then((response) => {
             setSaleItems(response.data);
           });
-      } else {
+      }
+      else {
         axios
           .get(
-            `http://127.0.0.1:3001/saleItems/${store}?search=${event.target.value}`
+            `${baseUrl}/saleItems/${store}?search=${event.target.value}`
           )
           .then((response) => {
             setSaleItems(response.data);
