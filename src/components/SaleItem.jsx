@@ -49,7 +49,7 @@ export default function SaleItem({
         <div className={styles.item2}>
           <img
             className={styles.imageProduct}
-            src={`https://d2wc5be2byue2g.cloudfront.net/maxi_${match[1]}.webp`}
+            src={`https://pub-9f9f2ae302be494cbffe02dd7ff666a1.r2.dev/maxi_${match[1]}.webp`}
           />
           <img className={styles.imageWoodSign} src={hangingSign} />
           <h4 className={styles.discount}>-{discount_percentage}%</h4>
