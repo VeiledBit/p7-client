@@ -30,20 +30,14 @@ export default function Home() {
 
   const handleChangeSearchItems = (event) => {
     clearTimeout(delayTimer);
-
     delayTimer = setTimeout(() => {
       if (event.target.value === "" || event.target.value.length < 2) {
+        axios.get(`${baseUrl}/saleItems/${store}`).then((response) => {
+          setSaleItems(response.data);
+        });
+      } else {
         axios
-          .get(`${baseUrl}/saleItems/${store}`)
-          .then((response) => {
-            setSaleItems(response.data);
-          });
-      }
-      else {
-        axios
-          .get(
-            `${baseUrl}/saleItems/${store}?search=${event.target.value}`
-          )
+          .get(`${baseUrl}/saleItems/${store}?search=${event.target.value}`)
           .then((response) => {
             setSaleItems(response.data);
           });
