@@ -12,53 +12,47 @@ import baseUrl from "../../config/url";
 export default function Home() {
   const [saleItems, setSaleItems] = useState([]);
   const [store, setStore] = useState("maxi");
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("category");
   let delayTimer;
 
   useEffect(() => {
-    axios
-      .get(`${baseUrl}/saleItems/${store}`)
-      .then((response) => {
-        setSaleItems(response.data);
-        console.log(response.data);
-      })
-      .catch();
-  }, [store]);
+    if (search === "" || search.length < 2) {
+      axios
+        .get(`${baseUrl}/saleItems/${store}/?sort=${sort}`)
+        .then((response) => {
+          setSaleItems(response.data);
+          console.log(response.data);
+        })
+        .catch();
+    } else {
+      axios
+        .get(`${baseUrl}/saleItems/${store}/?search=${search}&sort=${sort}`)
+        .then((response) => {
+          setSaleItems(response.data);
+          console.log(response.data);
+        })
+        .catch();
+    }
+  }, [store, search, sort]);
 
   const handleChange = (event) => {
     setStore(event.target.value);
   };
 
+  const handleChangeSort = (event) => {
+    setSort(event.target.value);
+  };
+
   const handleChangeSearchItems = (event) => {
     clearTimeout(delayTimer);
     delayTimer = setTimeout(() => {
-      if (event.target.value === "" || event.target.value.length < 2) {
-        axios.get(`${baseUrl}/saleItems/${store}`).then((response) => {
-          setSaleItems(response.data);
-        });
-      } else {
-        axios
-          .get(`${baseUrl}/saleItems/${store}?search=${event.target.value}`)
-          .then((response) => {
-            setSaleItems(response.data);
-          });
-      }
+      setSearch(event.target.value)
     }, 750);
   };
   return (
     <>
-      <div className="test">
-        <FormControl className={styles.selectStoreForm} fullWidth>
-          <InputLabel>Prodavnica</InputLabel>
-          <Select
-            className={styles.selectStore}
-            value={store}
-            label="Store name"
-            onChange={handleChange}
-          >
-            <MenuItem value="maxi">Maxi</MenuItem>
-            <MenuItem value="uni">Univerexport</MenuItem>
-          </Select>
-        </FormControl>
+      <div className={styles.gridSettings}>
         <TextField
           className={styles.textFieldSearch}
           label="Pretraga"
@@ -66,6 +60,31 @@ export default function Home() {
           onChange={handleChangeSearchItems}
           InputProps={{ sx: { borderRadius: "1rem" } }}
         />
+        <FormControl className={styles.selectStoreForm} fullWidth>
+          <InputLabel id="selectStore">Prodavnica</InputLabel>
+          <Select
+            className={styles.selectStore}
+            value={store}
+            onChange={handleChange}
+            label="selectStore"
+          >
+            <MenuItem value="maxi">Maxi</MenuItem>
+            <MenuItem value="uni">Univerexport</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl className={styles.selectSortForm} fullWidth>
+          <InputLabel id="selectSort">Sortiranje</InputLabel>
+          <Select
+            className={styles.selectSort}
+            value={sort}
+            label="selectSort"
+            onChange={handleChangeSort}
+          >
+            <MenuItem value="category">Kategorija</MenuItem>
+            <MenuItem value="discountHighest">Najveci popust</MenuItem>
+            <MenuItem value="discountLowest">Najnizi popust</MenuItem>
+          </Select>
+        </FormControl>
       </div>
       <div className={styles.angryGrid}>
         {saleItems.length > 0 ? (

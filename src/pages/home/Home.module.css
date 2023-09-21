@@ -14,7 +14,36 @@
   height: 100%;
 }
 
+.gridSettings {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-column-gap: 1rem;
+  height: 100%;
+}
+
+.textFieldSearch {
+  grid-row-start: 1;
+  grid-column-start: 1;
+  grid-row-end: 2;
+  grid-column-end: 7;
+  width: 100%;
+  padding-bottom: 1rem !important;
+}
+
 .selectStoreForm {
+  grid-row-start: 2;
+  grid-column-start: 1;
+  grid-row-end: 3;
+  grid-column-end: 3;
+  padding-bottom: 1rem !important;
+}
+
+.selectSortForm {
+  grid-row-start: 2;
+  grid-column-start: 3;
+  grid-row-end: 3;
+  grid-column-end: 5;
   padding-bottom: 1rem !important;
 }
 
@@ -22,7 +51,6 @@
   border-radius: 1rem !important;
 }
 
-.textFieldSearch {
-  width: 100%;
-  padding-bottom: 1rem !important;
+.selectSort {
+  border-radius: 1rem !important;
 }
