@@ -69,7 +69,7 @@ export default function Home() {
             label="selectStore"
           >
             <MenuItem value="maxi">Maxi</MenuItem>
-            <MenuItem value="uni">Univerexport</MenuItem>
+            <MenuItem value="elakolije">Univerexport</MenuItem>
           </Select>
         </FormControl>
         <FormControl className={styles.selectSortForm} fullWidth>
@@ -92,16 +92,16 @@ export default function Home() {
             {saleItems.map((item, index) => (
               <SaleItem
                 key={index}
+                store={store}
+                store_id={item.store_id}
                 name={item.name}
                 price_sale={item.price_sale}
                 price_regular={item.price_regular}
                 price_per_unit_sale={item.price_per_unit_sale}
                 discount_percentage={item.discount_percentage}
-                img_url={item.img_url}
                 unit={item.unit}
                 sale_start_date={item.sale_start_date}
                 sale_end_date={item.sale_end_date}
-                store_url={item.store_url}
               />
             ))}
           </>

@@ -2,22 +2,20 @@
 /* eslint-disable react/prop-types */
 import LogoStore from "./LogoStore";
 import styles from "./SaleItem.module.css";
-import hangingSign from "../assets/hangingSign.webp"
+import hangingSign from "../assets/hangingSign.webp";
 export default function SaleItem({
+  store,
+  store_id,
   name,
   price_sale,
   price_regular,
   price_per_unit_sale,
   // eslint-disable-next-line no-unused-vars
   discount_percentage,
-  img_url,
   unit,
   sale_start_date,
   sale_end_date,
-  store_url,
 }) {
-  const regex = /\/(\d+)\.png$/;
-  const match = img_url.match(regex);
   const dateStart = new Date(sale_start_date);
   const dateEnd = new Date(sale_end_date);
   const formattedDate = (date) => {
@@ -26,37 +24,20 @@ export default function SaleItem({
 
     return `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}`;
   };
-  const extractTLD = (url) => {
-    try {
-      const parsedUrl = new URL(url);
-      const hostnameParts = parsedUrl.hostname.split(".");
-      if (hostnameParts.length > 1) {
-        return hostnameParts[hostnameParts.length - 2];
-      }
-    } catch (error) {
-      console.error("Invalid URL:", error);
-    }
-    return "unknown";
-  };
-  const storeName = extractTLD(store_url);
   return (
     <div className={styles.saleItem}>
-      <LogoStore storeName={storeName} />
+      <LogoStore storeName={store} />
       <h4 className={styles.item1}>{`${formattedDate(
         dateStart
       )}-${formattedDate(dateEnd)}`}</h4>
-      {storeName === "maxi" ? (
-        <div className={styles.item2}>
-          <img
-            className={styles.imageProduct}
-            src={`https://pub-9f9f2ae302be494cbffe02dd7ff666a1.r2.dev/maxi_${match[1]}.webp`}
-          />
-          <img className={styles.imageWoodSign} src={hangingSign} />
-          <h4 className={styles.discount}>-{discount_percentage}%</h4>
-        </div>
-      ) : (
-        <img src="" />
-      )}
+      <div className={styles.item2}>
+        <img
+          className={styles.imageProduct}
+          src={`https://pub-9f9f2ae302be494cbffe02dd7ff666a1.r2.dev/${store}_${store_id}.webp`}
+        />
+        <img className={styles.imageWoodSign} src={hangingSign} />
+        <h4 className={styles.discount}>-{discount_percentage}%</h4>
+      </div>
       <h3 className={styles.item3}>{name}</h3>
       <h2 className={styles.item4}>{price_sale}</h2>
       <h4 className={styles.item5}>
