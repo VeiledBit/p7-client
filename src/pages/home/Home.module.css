@@ -47,11 +47,23 @@
   padding-bottom: 1rem !important;
 }
 
+.selectCategoryForm {
+  grid-row-start: 2;
+  grid-column-start: 5;
+  grid-row-end: 3;
+  grid-column-end: 7;
+  padding-bottom: 1rem !important;
+}
+
 .selectStore {
   border-radius: 1rem !important;
 }
 
 .selectSort {
+  border-radius: 1rem !important;
+}
+
+.selectCategory {
   border-radius: 1rem !important;
 }
 
