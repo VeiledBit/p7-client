@@ -10,7 +10,7 @@ export default function SaleItem({
   price_sale,
   price_regular,
   price_per_unit_sale,
-  // eslint-disable-next-line no-unused-vars
+  price_per_unit_regular,
   discount_percentage,
   unit,
   sale_start_date,
@@ -24,6 +24,16 @@ export default function SaleItem({
 
     return `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}`;
   };
+
+  const unitLarger = () => {
+    const pattern = /kg|g/;
+    if (pattern.test(unit)) {
+      return "kg";
+    } else {
+      return "l";
+    }
+  };
+
   return (
     <div className={styles.saleItem}>
       <LogoStore storeName={store} />
@@ -46,6 +56,13 @@ export default function SaleItem({
       <h4 className={styles.item6}>
         {price_per_unit_sale}/{unit}
       </h4>
+      {store === "maxi" && (
+        <h4 className={styles.item7}>
+          <strike>
+            {price_per_unit_regular}/{unitLarger()}
+          </strike>
+        </h4>
+      )}
     </div>
   );
 }

@@ -107,8 +107,11 @@
   align-self: center;
 }
 .item7 {
-  grid-row-start: 7;
+  grid-row-start: 5;
   grid-column-start: 3;
-  grid-row-end: 8;
+  grid-row-end: 6;
   grid-column-end: 5;
+  margin: 0;
+  justify-self: center;
+  align-self: center;
 }

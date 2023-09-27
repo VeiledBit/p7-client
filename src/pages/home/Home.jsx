@@ -213,6 +213,7 @@ export default function Home() {
                 price_sale={item.price_sale}
                 price_regular={item.price_regular}
                 price_per_unit_sale={item.price_per_unit_sale}
+                price_per_unit_regular={item.price_per_unit_regular}
                 discount_percentage={item.discount_percentage}
                 unit={item.unit}
                 sale_start_date={item.sale_start_date}
