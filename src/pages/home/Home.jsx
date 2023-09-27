@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import {
+  Button,
   Checkbox,
   Divider,
   FormControlLabel,
@@ -24,6 +25,8 @@ export default function Home() {
   const [categoryValues, setCategoryValues] = useState([]);
   const [selectAllCategories, setSelectAllCategories] = useState(true);
   const [categories, setCategories] = useState(categoryValues);
+  const [page, setPage] = useState(1);
+  const [isBtnLoadMoreShown, setIsBtnLoadMoreShown] = useState(true);
   let delayTimer;
 
   useEffect(() => {
@@ -45,19 +48,28 @@ export default function Home() {
           )}`
         )
         .then((response) => {
+          if (response.data.length == 90) {
+            setIsBtnLoadMoreShown(true);
+          } else {
+            setIsBtnLoadMoreShown(false);
+          }
           setSaleItems(response.data);
         })
         .catch();
     } else {
       axios
         .get(
-          `${baseUrl}/saleItems/${store}/?search=${search}&sort=${sort}&categories=${categories.join(
+          `${baseUrl}/saleItems/${store}/?page${page}&search=${search}&sort=${sort}&categories=${categories.join(
             "|"
           )}`
         )
         .then((response) => {
+          if (response.data.length == 90) {
+            setIsBtnLoadMoreShown(true);
+          } else {
+            setIsBtnLoadMoreShown(false);
+          }
           setSaleItems(response.data);
-          console.log(response.data);
         })
         .catch();
     }
@@ -98,6 +110,27 @@ export default function Home() {
     } else {
       setCategories([]);
     }
+  };
+
+  const handleLoadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    axios
+      .get(
+        `${baseUrl}/saleItems/${store}/?page=${nextPage}&sort=${sort}&categories=${categories.join(
+          "|"
+        )}`
+      )
+      .then((response) => {
+        const newItems = response.data;
+        if (newItems.length == 90) {
+          setIsBtnLoadMoreShown(true);
+        } else {
+          setIsBtnLoadMoreShown(false);
+        }
+        setSaleItems([...saleItems, ...newItems]);
+      })
+      .catch();
   };
 
   return (
@@ -191,6 +224,16 @@ export default function Home() {
           <h1>Nothing</h1>
         )}
       </div>
+      {isBtnLoadMoreShown && (
+        <Button
+          className={styles.btnLoadMore}
+          variant="contained"
+          size="large"
+          onClick={handleLoadMore}
+        >
+          Učitaj još
+        </Button>
+      )}
     </>
   );
 }
