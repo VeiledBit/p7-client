@@ -51,13 +51,20 @@
 .imageProduct {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 55%;
   transform: translate(-50%, -50%);
   width: auto;
   height: auto;
-  max-width: 12rem;
-  max-height: 12rem;
-  padding-top: 2rem;
+  max-width: 11rem;
+  max-height: 11rem;
+  margin-top: 1rem;
+}
+
+.imageWoodInfo {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  height: 3.5rem;
 }
 
 .imageWoodSign {
@@ -67,12 +74,26 @@
   height: 3.5rem;
 }
 
-.discount {
+.iconSmartphone {
+  position: absolute;
+  top: 1.3rem;
+  left: 1.5rem;
+}
+
+.discountItemsRequired {
+  position: absolute;
+  top: -4px;
+  left: 1.65rem;
+  font-size: 18px;
+}
+
+.discountPercentage {
   position: absolute;
   top: -4px;
   right: 15px;
   font-size: 18px;
 }
+
 .item3 {
   grid-row-start: 3;
   grid-column-start: 1;

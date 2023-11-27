@@ -218,6 +218,7 @@ export default function Home() {
                 unit={item.unit}
                 sale_start_date={item.sale_start_date}
                 sale_end_date={item.sale_end_date}
+                note={item.note}
               />
             ))}
           </>
