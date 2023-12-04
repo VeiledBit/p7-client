@@ -46,7 +46,7 @@ export default function SaleItem({
         dateStart
       )}-${formattedDate(dateEnd)}`}</h4>
       <div className={styles.item2}>
-        {store === "maxi" && note.includes("Cena za kupovinu 2 artikla") && (
+        {store === "maxi" && typeof note !== "undefined" && note.includes("Cena za kupovinu 2 artikla") && (
           <>
             <img className={styles.imageWoodInfo} src={hangingSign} />
             <Tooltip title="CENA ZA KUPOVINU 2 ARTIKLA">
@@ -54,7 +54,7 @@ export default function SaleItem({
             </Tooltip>
           </>
         )}
-        {store === "maxi" && note.includes("Samo uz Moj Maxi aplikaciju") && (
+        {store === "maxi" && typeof note !== "undefined" && note.includes("Samo uz Moj Maxi aplikaciju") && (
           <>
             <img className={styles.imageWoodInfo} src={hangingSign} />
             <Tooltip title="SAMO UZ MOJ MAXI APLIKACIJU">
