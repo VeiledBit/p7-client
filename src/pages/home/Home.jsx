@@ -8,8 +8,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import {
+  Box,
   Button,
   Checkbox,
+  CircularProgress,
   Divider,
   FormControlLabel,
   FormGroup,
@@ -223,7 +225,9 @@ export default function Home() {
             ))}
           </>
         ) : (
-          <h1>Nothing</h1>
+          <Box className={styles.spinner}>
+            <CircularProgress />
+          </Box>
         )}
       </div>
       {isBtnLoadMoreShown && (
