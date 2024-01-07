@@ -28,7 +28,7 @@ export default function Home() {
   const [selectAllCategories, setSelectAllCategories] = useState(true);
   const [categories, setCategories] = useState(categoryValues);
   const [page, setPage] = useState(1);
-  const [isBtnLoadMoreShown, setIsBtnLoadMoreShown] = useState(true);
+  const [isBtnLoadMoreShown, setIsBtnLoadMoreShown] = useState(false);
   let delayTimer;
 
   useEffect(() => {
