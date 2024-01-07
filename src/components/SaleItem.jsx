@@ -5,7 +5,7 @@ import styles from "./SaleItem.module.css";
 import hangingSign from "../assets/hangingSign.webp";
 import placeholder from "../assets/placeholder.png";
 import { Tooltip } from "@mui/material";
-import SmartphoneIcon from '@mui/icons-material/Smartphone';
+import SmartphoneIcon from "@mui/icons-material/Smartphone";
 
 export default function SaleItem({
   store,
@@ -30,15 +30,6 @@ export default function SaleItem({
     return `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}`;
   };
 
-  const unitLarger = () => {
-    const pattern = /kg|g/;
-    if (pattern.test(unit)) {
-      return "kg";
-    } else {
-      return "l";
-    }
-  };
-
   return (
     <div className={styles.saleItem}>
       <LogoStore storeName={store} />
@@ -46,22 +37,26 @@ export default function SaleItem({
         dateStart
       )}-${formattedDate(dateEnd)}`}</h4>
       <div className={styles.item2}>
-        {store === "maxi" && typeof note !== "undefined" && note.includes("Cena za kupovinu 2 artikla") && (
-          <>
-            <img className={styles.imageWoodInfo} src={hangingSign} />
-            <Tooltip title="CENA ZA KUPOVINU 2 ARTIKLA">
-              <h4 className={styles.discountItemsRequired}>x2</h4>
-            </Tooltip>
-          </>
-        )}
-        {store === "maxi" && typeof note !== "undefined" && note.includes("Samo uz Moj Maxi aplikaciju") && (
-          <>
-            <img className={styles.imageWoodInfo} src={hangingSign} />
-            <Tooltip title="SAMO UZ MOJ MAXI APLIKACIJU">
-              <SmartphoneIcon className={styles.iconSmartphone} />
-            </Tooltip>
-          </>
-        )}
+        {store === "maxi" &&
+          typeof note !== "undefined" &&
+          note.includes("Cena za kupovinu 2 artikla") && (
+            <>
+              <img className={styles.imageWoodInfo} src={hangingSign} />
+              <Tooltip title="CENA ZA KUPOVINU 2 ARTIKLA">
+                <h4 className={styles.discountItemsRequired}>x2</h4>
+              </Tooltip>
+            </>
+          )}
+        {store === "maxi" &&
+          typeof note !== "undefined" &&
+          note.includes("Samo uz Moj Maxi aplikaciju") && (
+            <>
+              <img className={styles.imageWoodInfo} src={hangingSign} />
+              <Tooltip title="SAMO UZ MOJ MAXI APLIKACIJU">
+                <SmartphoneIcon className={styles.iconSmartphone} />
+              </Tooltip>
+            </>
+          )}
         <img
           className={styles.imageProduct}
           src={`https://pub-9f9f2ae302be494cbffe02dd7ff666a1.r2.dev/${store}_${store_id}.webp`}
@@ -78,13 +73,15 @@ export default function SaleItem({
       <h4 className={styles.item5}>
         <strike>{price_regular}</strike>
       </h4>
-      <h4 className={styles.item6}>
-        {price_per_unit_sale}/{unit}
-      </h4>
-      {store === "maxi" && (
+      {price_per_unit_sale && (
+        <h4 className={styles.item6}>
+          {price_per_unit_sale}/{unit}
+        </h4>
+      )}
+      {store === "maxi" && price_per_unit_regular && (
         <h4 className={styles.item7}>
           <strike>
-            {price_per_unit_regular}/{unitLarger()}
+            {price_per_unit_regular}/{unit}
           </strike>
         </h4>
       )}
