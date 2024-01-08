@@ -168,6 +168,14 @@ export default function Home() {
             <MenuItem value="category">Kategorija</MenuItem>
             <MenuItem value="discountHighest">Najveci popust</MenuItem>
             <MenuItem value="discountLowest">Najnizi popust</MenuItem>
+            <MenuItem value="priceLowest">Najniza cena</MenuItem>
+            <MenuItem value="priceHighest">Najveca cena</MenuItem>
+            <MenuItem value="pricePerUnitLowest">
+              Najniza cena po jednicnoj meri
+            </MenuItem>
+            <MenuItem value="pricePerUnitHighest">
+              Najveca cena po jednicnoj meri
+            </MenuItem>
           </Select>
         </FormControl>
         <FormControl className={styles.selectCategoryForm} fullWidth>
