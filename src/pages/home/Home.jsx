@@ -15,6 +15,7 @@ import {
   Divider,
   FormControlLabel,
   FormGroup,
+  Switch,
   TextField,
 } from "@mui/material";
 import baseUrl from "../../config/url";
@@ -27,6 +28,7 @@ export default function Home() {
   const [categoryValues, setCategoryValues] = useState([]);
   const [selectAllCategories, setSelectAllCategories] = useState(true);
   const [categories, setCategories] = useState(categoryValues);
+  const [isPriceRoundChecked, setIsPriceRoundChecked] = useState(false);
   const [page, setPage] = useState(1);
   const [isBtnLoadMoreShown, setIsBtnLoadMoreShown] = useState(false);
   let delayTimer;
@@ -77,6 +79,10 @@ export default function Home() {
     }
   }, [store, search, sort, categories]);
 
+  useEffect(() => {
+    console.log(isPriceRoundChecked);
+  }, [isPriceRoundChecked])
+
   const handleChange = (event) => {
     setStore(event.target.value);
   };
@@ -112,6 +118,10 @@ export default function Home() {
     } else {
       setCategories([]);
     }
+  };
+
+  const handleChangeSwitchPriceRound = () => {
+    setIsPriceRoundChecked(!isPriceRoundChecked);
   };
 
   const handleLoadMore = () => {
@@ -210,20 +220,32 @@ export default function Home() {
             ))}
           </Select>
         </FormControl>
+        <FormControlLabel
+          className={styles.switchPriceRound}
+          control={
+            <Switch checked={isPriceRoundChecked} onChange={handleChangeSwitchPriceRound} />
+          }
+          label="Zaokruzi cene"
+        />
       </div>
       <div className={styles.angryGrid}>
         {saleItems.length > 0 ? (
           <>
             {saleItems.map((item, index) => (
               <SaleItem
+                isPriceRoundChecked={isPriceRoundChecked}
                 key={index}
                 store={store}
                 store_id={item.store_id}
                 name={item.name}
                 price_sale={item.price_sale}
+                price_sale_rounded={item.price_sale_rounded}
                 price_regular={item.price_regular}
+                price_regular_rounded={item.price_regular_rounded}
                 price_per_unit_sale={item.price_per_unit_sale}
+                price_per_unit_sale_rounded={item.price_per_unit_sale_rounded}
                 price_per_unit_regular={item.price_per_unit_regular}
+                price_per_unit_regular_rounded={item.price_per_unit_regular_rounded}
                 discount_percentage={item.discount_percentage}
                 unit={item.unit}
                 sale_start_date={item.sale_start_date}

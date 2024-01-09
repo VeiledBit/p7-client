@@ -8,13 +8,18 @@ import { Tooltip } from "@mui/material";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
 
 export default function SaleItem({
+  isPriceRoundChecked,
   store,
   store_id,
   name,
   price_sale,
+  price_sale_rounded,
   price_regular,
+  price_regular_rounded,
   price_per_unit_sale,
+  price_per_unit_sale_rounded,
   price_per_unit_regular,
+  price_per_unit_regular_rounded,
   discount_percentage,
   unit,
   sale_start_date,
@@ -69,19 +74,29 @@ export default function SaleItem({
         <h4 className={styles.discountPercentage}>-{discount_percentage}%</h4>
       </div>
       <h3 className={styles.item3}>{name}</h3>
-      <h2 className={styles.item4}>{price_sale}</h2>
+      <h2 className={styles.item4}>
+        {isPriceRoundChecked ? price_sale_rounded : price_sale}
+      </h2>
       <h4 className={styles.item5}>
-        <strike>{price_regular}</strike>
+        <strike>
+          {isPriceRoundChecked ? price_regular_rounded : price_regular}
+        </strike>
       </h4>
       {price_per_unit_sale && (
         <h4 className={styles.item6}>
-          {price_per_unit_sale}/{unit}
+          {isPriceRoundChecked
+            ? price_per_unit_sale_rounded
+            : price_per_unit_sale}
+          /{unit}
         </h4>
       )}
       {store === "maxi" && price_per_unit_regular && (
         <h4 className={styles.item7}>
           <strike>
-            {price_per_unit_regular}/{unit}
+            {isPriceRoundChecked
+              ? price_per_unit_regular_rounded
+              : price_per_unit_regular}
+            /{unit}
           </strike>
         </h4>
       )}
