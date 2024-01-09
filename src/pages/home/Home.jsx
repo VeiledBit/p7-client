@@ -72,9 +72,9 @@ export default function Home() {
       setIsSpinnerLoadingShown(true);
       let fetchUrl;
       if (isSearchAllStoresChecked) {
-        fetchUrl = `${baseUrl}/saleItems?page=${page}&search=${search}&sort=${sort}`;
+        fetchUrl = `${baseUrl}/saleItems?search=${search}&sort=${sort}`;
       } else {
-        fetchUrl = `${baseUrl}/saleItems/${store}/?page${page}&search=${search}&sort=${sort}&categories=${categories.join(
+        fetchUrl = `${baseUrl}/saleItems/${store}/?search=${search}&sort=${sort}&categories=${categories.join(
           "|"
         )}`;
       }
