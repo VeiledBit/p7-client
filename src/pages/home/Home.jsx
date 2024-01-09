@@ -30,6 +30,7 @@ export default function Home() {
   const [categories, setCategories] = useState(categoryValues);
   const [isPriceRoundChecked, setIsPriceRoundChecked] = useState(false);
   const [page, setPage] = useState(1);
+  const [isSpinnerLoadingShown, setIsSpinnerLoadingShown] = useState(true);
   const [isBtnLoadMoreShown, setIsBtnLoadMoreShown] = useState(false);
   let delayTimer;
 
@@ -45,6 +46,7 @@ export default function Home() {
 
   useEffect(() => {
     if (search === "" || search.length < 2) {
+      setIsSpinnerLoadingShown(true);
       axios
         .get(
           `${baseUrl}/saleItems/${store}/?sort=${sort}&categories=${categories.join(
@@ -57,10 +59,12 @@ export default function Home() {
           } else {
             setIsBtnLoadMoreShown(false);
           }
+          setIsSpinnerLoadingShown(false);
           setSaleItems(response.data);
         })
         .catch();
     } else {
+      setIsSpinnerLoadingShown(true);
       axios
         .get(
           `${baseUrl}/saleItems/${store}/?page${page}&search=${search}&sort=${sort}&categories=${categories.join(
@@ -73,6 +77,7 @@ export default function Home() {
           } else {
             setIsBtnLoadMoreShown(false);
           }
+          setIsSpinnerLoadingShown(false);
           setSaleItems(response.data);
         })
         .catch();
@@ -81,7 +86,7 @@ export default function Home() {
 
   useEffect(() => {
     console.log(isPriceRoundChecked);
-  }, [isPriceRoundChecked])
+  }, [isPriceRoundChecked]);
 
   const handleChange = (event) => {
     setStore(event.target.value);
@@ -223,7 +228,10 @@ export default function Home() {
         <FormControlLabel
           className={styles.switchPriceRound}
           control={
-            <Switch checked={isPriceRoundChecked} onChange={handleChangeSwitchPriceRound} />
+            <Switch
+              checked={isPriceRoundChecked}
+              onChange={handleChangeSwitchPriceRound}
+            />
           }
           label="Zaokruzi cene"
         />
@@ -245,7 +253,9 @@ export default function Home() {
                 price_per_unit_sale={item.price_per_unit_sale}
                 price_per_unit_sale_rounded={item.price_per_unit_sale_rounded}
                 price_per_unit_regular={item.price_per_unit_regular}
-                price_per_unit_regular_rounded={item.price_per_unit_regular_rounded}
+                price_per_unit_regular_rounded={
+                  item.price_per_unit_regular_rounded
+                }
                 discount_percentage={item.discount_percentage}
                 unit={item.unit}
                 sale_start_date={item.sale_start_date}
@@ -255,9 +265,15 @@ export default function Home() {
             ))}
           </>
         ) : (
-          <Box className={styles.spinner}>
-            <CircularProgress />
-          </Box>
+          <>
+            {isSpinnerLoadingShown ? (
+              <Box className={styles.spinner}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <></>
+            )}
+          </>
         )}
       </div>
       {isBtnLoadMoreShown && (
