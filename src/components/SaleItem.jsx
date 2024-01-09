@@ -74,32 +74,44 @@ export default function SaleItem({
         <h4 className={styles.discountPercentage}>-{discount_percentage}%</h4>
       </div>
       <h3 className={styles.item3}>{name}</h3>
-      <h2 className={styles.item4}>
+      <h2
+        className={
+          discount_percentage > 0 ? styles.item4 : styles.item4Centered
+        }
+      >
         {isPriceRoundChecked ? price_sale_rounded : price_sale}
       </h2>
-      <h4 className={styles.item5}>
-        <strike>
-          {isPriceRoundChecked ? price_regular_rounded : price_regular}
-        </strike>
-      </h4>
+      {discount_percentage > 0 && (
+        <h4 className={styles.item5}>
+          <strike>
+            {isPriceRoundChecked ? price_regular_rounded : price_regular}
+          </strike>
+        </h4>
+      )}
       {price_per_unit_sale && (
-        <h4 className={styles.item6}>
+        <h4
+          className={
+            discount_percentage > 0 ? styles.item6 : styles.item6Centered
+          }
+        >
           {isPriceRoundChecked
             ? price_per_unit_sale_rounded
             : price_per_unit_sale}
           /{unit}
         </h4>
       )}
-      {store === "maxi" && price_per_unit_regular && (
-        <h4 className={styles.item7}>
-          <strike>
-            {isPriceRoundChecked
-              ? price_per_unit_regular_rounded
-              : price_per_unit_regular}
-            /{unit}
-          </strike>
-        </h4>
-      )}
+      {store === "maxi" &&
+        price_per_unit_regular &&
+        discount_percentage > 0 && (
+          <h4 className={styles.item7}>
+            <strike>
+              {isPriceRoundChecked
+                ? price_per_unit_regular_rounded
+                : price_per_unit_regular}
+              /{unit}
+            </strike>
+          </h4>
+        )}
     </div>
   );
 }
