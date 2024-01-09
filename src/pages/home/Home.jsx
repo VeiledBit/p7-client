@@ -29,6 +29,11 @@ export default function Home() {
   const [selectAllCategories, setSelectAllCategories] = useState(true);
   const [categories, setCategories] = useState(categoryValues);
   const [isPriceRoundChecked, setIsPriceRoundChecked] = useState(false);
+  const [isSearchAllStoresChecked, setIsSearchAllStoresChecked] =
+    useState(false);
+  const [isSelectStoreDisabled, setIsSelectStoreDisabled] = useState(false);
+  const [isSelectCategoryDisabled, setIsSelectCategoryDisabled] =
+    useState(false);
   const [page, setPage] = useState(1);
   const [isSpinnerLoadingShown, setIsSpinnerLoadingShown] = useState(true);
   const [isBtnLoadMoreShown, setIsBtnLoadMoreShown] = useState(false);
@@ -65,12 +70,16 @@ export default function Home() {
         .catch();
     } else {
       setIsSpinnerLoadingShown(true);
+      let fetchUrl;
+      if (isSearchAllStoresChecked) {
+        fetchUrl = `${baseUrl}/saleItems?page=${page}&search=${search}&sort=${sort}`;
+      } else {
+        fetchUrl = `${baseUrl}/saleItems/${store}/?page${page}&search=${search}&sort=${sort}&categories=${categories.join(
+          "|"
+        )}`;
+      }
       axios
-        .get(
-          `${baseUrl}/saleItems/${store}/?page${page}&search=${search}&sort=${sort}&categories=${categories.join(
-            "|"
-          )}`
-        )
+        .get(fetchUrl)
         .then((response) => {
           if (response.data.length == 90) {
             setIsBtnLoadMoreShown(true);
@@ -82,11 +91,7 @@ export default function Home() {
         })
         .catch();
     }
-  }, [store, search, sort, categories]);
-
-  useEffect(() => {
-    console.log(isPriceRoundChecked);
-  }, [isPriceRoundChecked]);
+  }, [isSearchAllStoresChecked, store, search, sort, categories]);
 
   const handleChange = (event) => {
     setStore(event.target.value);
@@ -129,6 +134,12 @@ export default function Home() {
     setIsPriceRoundChecked(!isPriceRoundChecked);
   };
 
+  const handleChangeSearchAllStores = () => {
+    setIsSearchAllStoresChecked(!isSearchAllStoresChecked);
+    setIsSelectStoreDisabled(!isSelectStoreDisabled);
+    setIsSelectCategoryDisabled(!isSelectCategoryDisabled);
+  };
+
   const handleLoadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -160,7 +171,11 @@ export default function Home() {
           onChange={handleChangeSearchItems}
           InputProps={{ sx: { borderRadius: "1rem" } }}
         />
-        <FormControl className={styles.selectStoreForm} fullWidth>
+        <FormControl
+          disabled={isSelectStoreDisabled}
+          className={styles.selectStoreForm}
+          fullWidth
+        >
           <InputLabel id="selectStore">Prodavnica</InputLabel>
           <Select
             className={styles.selectStore}
@@ -193,7 +208,11 @@ export default function Home() {
             </MenuItem>
           </Select>
         </FormControl>
-        <FormControl className={styles.selectCategoryForm} fullWidth>
+        <FormControl
+          disabled={isSelectCategoryDisabled}
+          className={styles.selectCategoryForm}
+          fullWidth
+        >
           <InputLabel id="selectCategory">Kategorije</InputLabel>
           <Select
             multiple
@@ -235,6 +254,16 @@ export default function Home() {
           }
           label="Zaokruzi cene"
         />
+        <FormControlLabel
+          className={styles.switchSearchAllStores}
+          control={
+            <Switch
+              checked={isSearchAllStoresChecked}
+              onChange={handleChangeSearchAllStores}
+            />
+          }
+          label="Pretrazi sve prodavnice"
+        />
       </div>
       <div className={styles.angryGrid}>
         {saleItems.length > 0 ? (
@@ -243,7 +272,7 @@ export default function Home() {
               <SaleItem
                 isPriceRoundChecked={isPriceRoundChecked}
                 key={index}
-                store={store}
+                store={item.store}
                 store_id={item.store_id}
                 name={item.name}
                 price_sale={item.price_sale}
