@@ -54,6 +54,16 @@ export default function SaleItem({
           )}
         {store === "maxi" &&
           typeof note !== "undefined" &&
+          note.includes("Cena za kupovinu 3 artikla") && (
+            <>
+              <img className={styles.imageWoodInfo} src={hangingSign} />
+              <Tooltip title="CENA ZA KUPOVINU 3 ARTIKLA">
+                <h4 className={styles.discountItemsRequired}>x3</h4>
+              </Tooltip>
+            </>
+          )}
+        {store === "maxi" &&
+          typeof note !== "undefined" &&
           note.includes("Samo uz Moj Maxi aplikaciju") && (
             <>
               <img className={styles.imageWoodInfo} src={hangingSign} />
