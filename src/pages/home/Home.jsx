@@ -273,7 +273,6 @@ export default function Home() {
                 isPriceRoundChecked={isPriceRoundChecked}
                 key={index}
                 store={item.store}
-                store_id={item.store_id}
                 name={item.name}
                 price_sale={item.price_sale}
                 price_sale_rounded={item.price_sale_rounded}
@@ -289,6 +288,7 @@ export default function Home() {
                 unit={item.unit}
                 sale_start_date={item.sale_start_date}
                 sale_end_date={item.sale_end_date}
+                img_url={item.img_url}
                 note={item.note}
               />
             ))}

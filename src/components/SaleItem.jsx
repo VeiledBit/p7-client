@@ -10,7 +10,6 @@ import SmartphoneIcon from "@mui/icons-material/Smartphone";
 export default function SaleItem({
   isPriceRoundChecked,
   store,
-  store_id,
   name,
   price_sale,
   price_sale_rounded,
@@ -24,6 +23,7 @@ export default function SaleItem({
   unit,
   sale_start_date,
   sale_end_date,
+  img_url,
   note,
 }) {
   const dateStart = new Date(sale_start_date);
@@ -74,7 +74,7 @@ export default function SaleItem({
           )}
         <img
           className={styles.imageProduct}
-          src={`https://pub-9f9f2ae302be494cbffe02dd7ff666a1.r2.dev/${store}_${store_id}.webp`}
+          src={img_url}
           onError={({ currentTarget }) => {
             currentTarget.onerror = null; // prevents looping
             currentTarget.src = placeholder;
