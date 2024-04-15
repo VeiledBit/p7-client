@@ -18,9 +18,13 @@ import {
   Switch,
   TextField,
 } from "@mui/material";
+import supabase from "../../config/supabase";
 import baseUrl from "../../config/url";
+import AuthModal from "../../components/Auth";
+import Navbar from "../../components/Navbar";
 
 export default function Home() {
+  const [session, setSession] = useState({});
   const [saleItems, setSaleItems] = useState([]);
   const [store, setStore] = useState("maxi");
   const [search, setSearch] = useState("");
@@ -31,6 +35,9 @@ export default function Home() {
   const [isPriceRoundChecked, setIsPriceRoundChecked] = useState(false);
   const [isSearchAllStoresChecked, setIsSearchAllStoresChecked] =
     useState(false);
+  const [isShowFavoritesChecked, setIsShowFavoritesChecked] = useState(false);
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [btnLoginText, setBtnLoginText] = useState("");
   const [isSelectStoreDisabled, setIsSelectStoreDisabled] = useState(false);
   const [isSelectCategoryDisabled, setIsSelectCategoryDisabled] =
     useState(false);
@@ -38,6 +45,20 @@ export default function Home() {
   const [isSpinnerLoadingShown, setIsSpinnerLoadingShown] = useState(true);
   const [isBtnLoadMoreShown, setIsBtnLoadMoreShown] = useState(false);
   let delayTimer;
+
+  useEffect(() => {
+    const setUpSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      setSession(data.session);
+    };
+    setUpSession();
+  }, []);
+
+  useEffect(() => {
+    Object.keys(session).length === 0
+      ? setBtnLoginText("LOGIN")
+      : setBtnLoginText("LOGOUT");
+  }, [session]);
 
   useEffect(() => {
     axios
@@ -140,6 +161,28 @@ export default function Home() {
     setIsSelectCategoryDisabled(!isSelectCategoryDisabled);
   };
 
+  const handleChangeFavorites = () => {
+    setIsShowFavoritesChecked(!isShowFavoritesChecked);
+  };
+
+  const handleLogin = () => {
+    if (Object.keys(session).length === 0) {
+      handleOpenAuthModal();
+    } else {
+      supabase.auth.signOut();
+      setSession({});
+      setBtnLoginText("LOGIN");
+    }
+  };
+
+  const handleOpenAuthModal = () => {
+    setAuthModalOpen(true);
+  };
+
+  const handleCloseAuthModal = () => {
+    setAuthModalOpen(false);
+  };
+
   const handleLoadMore = () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -163,6 +206,7 @@ export default function Home() {
 
   return (
     <>
+      <Navbar handleLogin={handleLogin} btnLoginText={btnLoginText} />
       <div className={styles.gridSettings}>
         <TextField
           className={styles.textFieldSearch}
@@ -264,6 +308,20 @@ export default function Home() {
           }
           label="Pretrazi sve prodavnice"
         />
+        {Object.keys(session).length !== 0 ? (
+          <FormControlLabel
+            className={styles.switchFavorites}
+            control={
+              <Switch
+                checked={isShowFavoritesChecked}
+                onChange={handleChangeFavorites}
+              />
+            }
+            label="Prikazi omiljene proizvode"
+          />
+        ) : (
+          <></>
+        )}
       </div>
       <div className={styles.angryGrid}>
         {saleItems.length > 0 ? (
@@ -305,6 +363,12 @@ export default function Home() {
           </>
         )}
       </div>
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={handleCloseAuthModal}
+        supabase={supabase}
+        setSession={setSession}
+      />
       {isBtnLoadMoreShown && (
         <Button
           className={styles.btnLoadMore}

@@ -1,0 +1,11 @@
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  flex-grow: 1;
+}
+
+.btnLogin {
+  margin-left: auto;
+}
