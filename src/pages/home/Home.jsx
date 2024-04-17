@@ -74,57 +74,61 @@ export default function Home() {
   useEffect(() => {
     const setUpSession = async () => {
       const { data, error } = await supabase.auth.getSession();
+      let token;
       if (data.session !== null) {
-        if (search === "" || search.length < 2) {
-          setIsSpinnerLoadingShown(true);
-          axios
-            .get(
-              `${baseUrl}/saleItems/${store}/?sort=${sort}&categories=${categories.join(
-                "|"
-              )}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${data.session.access_token}`,
-                },
-              }
-            )
-            .then((response) => {
-              if (response.data.length == 90) {
-                setIsBtnLoadMoreShown(true);
-              } else {
-                setIsBtnLoadMoreShown(false);
-              }
-              setIsSpinnerLoadingShown(false);
-              setSaleItems(response.data);
-            })
-            .catch();
-        } else {
-          setIsSpinnerLoadingShown(true);
-          let fetchUrl;
-          if (isSearchAllStoresChecked) {
-            fetchUrl = `${baseUrl}/saleItems?search=${search}&sort=${sort}`;
-          } else {
-            fetchUrl = `${baseUrl}/saleItems/${store}/?search=${search}&sort=${sort}&categories=${categories.join(
+        token = `Bearer ${data.session.access_token}`;
+      } else {
+        token = `Bearer none`;
+      }
+      if (search === "" || search.length < 2) {
+        setIsSpinnerLoadingShown(true);
+        axios
+          .get(
+            `${baseUrl}/saleItems/${store}/?sort=${sort}&categories=${categories.join(
               "|"
-            )}`;
-          }
-          axios
-            .get(fetchUrl, {
+            )}`,
+            {
               headers: {
-                Authorization: `Bearer ${data.session.access_token}`,
+                Authorization: token,
               },
-            })
-            .then((response) => {
-              if (response.data.length == 90) {
-                setIsBtnLoadMoreShown(true);
-              } else {
-                setIsBtnLoadMoreShown(false);
-              }
-              setIsSpinnerLoadingShown(false);
-              setSaleItems(response.data);
-            })
-            .catch();
+            }
+          )
+          .then((response) => {
+            if (response.data.length == 90) {
+              setIsBtnLoadMoreShown(true);
+            } else {
+              setIsBtnLoadMoreShown(false);
+            }
+            setIsSpinnerLoadingShown(false);
+            setSaleItems(response.data);
+          })
+          .catch();
+      } else {
+        setIsSpinnerLoadingShown(true);
+        let fetchUrl;
+        if (isSearchAllStoresChecked) {
+          fetchUrl = `${baseUrl}/saleItems?search=${search}&sort=${sort}`;
+        } else {
+          fetchUrl = `${baseUrl}/saleItems/${store}/?search=${search}&sort=${sort}&categories=${categories.join(
+            "|"
+          )}`;
         }
+        axios
+          .get(fetchUrl, {
+            headers: {
+              Authorization: token,
+            },
+          })
+          .then((response) => {
+            if (response.data.length == 90) {
+              setIsBtnLoadMoreShown(true);
+            } else {
+              setIsBtnLoadMoreShown(false);
+            }
+            setIsSpinnerLoadingShown(false);
+            setSaleItems(response.data);
+          })
+          .catch();
       }
     };
 
