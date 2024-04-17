@@ -80,6 +80,13 @@
   left: 1.5rem;
 }
 
+.iconFavorite {
+  position: absolute;
+  top: 1.30rem;
+  left: 5.5rem;
+  color: red;
+}
+
 .discountItemsRequired {
   position: absolute;
   top: -4px;

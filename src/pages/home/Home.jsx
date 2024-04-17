@@ -35,7 +35,6 @@ export default function Home() {
   const [isPriceRoundChecked, setIsPriceRoundChecked] = useState(false);
   const [isSearchAllStoresChecked, setIsSearchAllStoresChecked] =
     useState(false);
-  const [isShowFavoritesChecked, setIsShowFavoritesChecked] = useState(false);
   const [isAuthModalOpen, setAuthModalOpen] = useState(false);
   const [btnLoginText, setBtnLoginText] = useState("");
   const [isSelectStoreDisabled, setIsSelectStoreDisabled] = useState(false);
@@ -49,7 +48,9 @@ export default function Home() {
   useEffect(() => {
     const setUpSession = async () => {
       const { data, error } = await supabase.auth.getSession();
-      setSession(data.session);
+      if (data.session !== null) {
+        setSession(data.session);
+      }
     };
     setUpSession();
   }, []);
@@ -71,47 +72,63 @@ export default function Home() {
   }, [store]);
 
   useEffect(() => {
-    if (search === "" || search.length < 2) {
-      setIsSpinnerLoadingShown(true);
-      axios
-        .get(
-          `${baseUrl}/saleItems/${store}/?sort=${sort}&categories=${categories.join(
-            "|"
-          )}`
-        )
-        .then((response) => {
-          if (response.data.length == 90) {
-            setIsBtnLoadMoreShown(true);
+    const setUpSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (data.session !== null) {
+        if (search === "" || search.length < 2) {
+          setIsSpinnerLoadingShown(true);
+          axios
+            .get(
+              `${baseUrl}/saleItems/${store}/?sort=${sort}&categories=${categories.join(
+                "|"
+              )}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${data.session.access_token}`,
+                },
+              }
+            )
+            .then((response) => {
+              if (response.data.length == 90) {
+                setIsBtnLoadMoreShown(true);
+              } else {
+                setIsBtnLoadMoreShown(false);
+              }
+              setIsSpinnerLoadingShown(false);
+              setSaleItems(response.data);
+            })
+            .catch();
+        } else {
+          setIsSpinnerLoadingShown(true);
+          let fetchUrl;
+          if (isSearchAllStoresChecked) {
+            fetchUrl = `${baseUrl}/saleItems?search=${search}&sort=${sort}`;
           } else {
-            setIsBtnLoadMoreShown(false);
+            fetchUrl = `${baseUrl}/saleItems/${store}/?search=${search}&sort=${sort}&categories=${categories.join(
+              "|"
+            )}`;
           }
-          setIsSpinnerLoadingShown(false);
-          setSaleItems(response.data);
-        })
-        .catch();
-    } else {
-      setIsSpinnerLoadingShown(true);
-      let fetchUrl;
-      if (isSearchAllStoresChecked) {
-        fetchUrl = `${baseUrl}/saleItems?search=${search}&sort=${sort}`;
-      } else {
-        fetchUrl = `${baseUrl}/saleItems/${store}/?search=${search}&sort=${sort}&categories=${categories.join(
-          "|"
-        )}`;
+          axios
+            .get(fetchUrl, {
+              headers: {
+                Authorization: `Bearer ${data.session.access_token}`,
+              },
+            })
+            .then((response) => {
+              if (response.data.length == 90) {
+                setIsBtnLoadMoreShown(true);
+              } else {
+                setIsBtnLoadMoreShown(false);
+              }
+              setIsSpinnerLoadingShown(false);
+              setSaleItems(response.data);
+            })
+            .catch();
+        }
       }
-      axios
-        .get(fetchUrl)
-        .then((response) => {
-          if (response.data.length == 90) {
-            setIsBtnLoadMoreShown(true);
-          } else {
-            setIsBtnLoadMoreShown(false);
-          }
-          setIsSpinnerLoadingShown(false);
-          setSaleItems(response.data);
-        })
-        .catch();
-    }
+    };
+
+    setUpSession();
   }, [isSearchAllStoresChecked, store, search, sort, categories]);
 
   const handleChange = (event) => {
@@ -161,10 +178,6 @@ export default function Home() {
     setIsSelectCategoryDisabled(!isSelectCategoryDisabled);
   };
 
-  const handleChangeFavorites = () => {
-    setIsShowFavoritesChecked(!isShowFavoritesChecked);
-  };
-
   const handleLogin = () => {
     if (Object.keys(session).length === 0) {
       handleOpenAuthModal();
@@ -190,7 +203,12 @@ export default function Home() {
       .get(
         `${baseUrl}/saleItems/${store}/?page=${nextPage}&sort=${sort}&categories=${categories.join(
           "|"
-        )}`
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        }
       )
       .then((response) => {
         const newItems = response.data;
@@ -308,20 +326,6 @@ export default function Home() {
           }
           label="Pretrazi sve prodavnice"
         />
-        {Object.keys(session).length !== 0 ? (
-          <FormControlLabel
-            className={styles.switchFavorites}
-            control={
-              <Switch
-                checked={isShowFavoritesChecked}
-                onChange={handleChangeFavorites}
-              />
-            }
-            label="Prikazi omiljene proizvode"
-          />
-        ) : (
-          <></>
-        )}
       </div>
       <div className={styles.angryGrid}>
         {saleItems.length > 0 ? (
@@ -330,6 +334,7 @@ export default function Home() {
               <SaleItem
                 isPriceRoundChecked={isPriceRoundChecked}
                 key={index}
+                id={item.id}
                 store={item.store}
                 name={item.name}
                 price_sale={item.price_sale}
@@ -348,6 +353,7 @@ export default function Home() {
                 sale_end_date={item.sale_end_date}
                 img_url={item.img_url}
                 note={item.note}
+                isFavored={item.isFavored}
               />
             ))}
           </>

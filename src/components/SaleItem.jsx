@@ -6,9 +6,15 @@ import hangingSign from "../assets/hangingSign.webp";
 import placeholder from "../assets/placeholder.png";
 import { Tooltip } from "@mui/material";
 import SmartphoneIcon from "@mui/icons-material/Smartphone";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import axios from "axios";
+import baseUrl from "../config/url";
+import supabase from "../config/supabase";
+import { useEffect, useState } from "react";
 
 export default function SaleItem({
   isPriceRoundChecked,
+  id,
   store,
   name,
   price_sale,
@@ -25,7 +31,9 @@ export default function SaleItem({
   sale_end_date,
   img_url,
   note,
+  isFavored,
 }) {
+  const [isFavoredState, setIsFavoredState] = useState();
   const dateStart = new Date(sale_start_date);
   const dateEnd = new Date(sale_end_date);
   const formattedDate = (date) => {
@@ -33,6 +41,31 @@ export default function SaleItem({
     const month = date.getMonth() + 1; // months are zero-based, add 1
 
     return `${day < 10 ? "0" : ""}${day}.${month < 10 ? "0" : ""}${month}`;
+  };
+
+  useEffect(() => {
+    setIsFavoredState(isFavored);
+  }, [isFavored]);
+
+  const handleFavorite = async () => {
+    const { data, error } = await supabase.auth.getSession();
+    if (data.session !== null) {
+      axios
+        .put(
+          `${baseUrl}/saleItems/${store}/favorite`,
+          { itemId: id },
+          {
+            headers: {
+              Authorization: `Bearer ${data.session.access_token}`,
+            },
+          }
+        )
+        .then((response) => {
+          if (response.status === 200 || response.status === 201) {
+            setIsFavoredState(!isFavoredState);
+          }
+        });
+    }
   };
 
   return (
@@ -75,11 +108,17 @@ export default function SaleItem({
         <img
           className={styles.imageProduct}
           src={img_url}
+          onClick={handleFavorite}
           onError={({ currentTarget }) => {
             currentTarget.onerror = null; // prevents looping
             currentTarget.src = placeholder;
           }}
         />
+        {isFavoredState ? (
+          <FavoriteIcon className={styles.iconFavorite} />
+        ) : (
+          <></>
+        )}
         <img className={styles.imageWoodSign} src={hangingSign} />
         <h4 className={styles.discountPercentage}>-{discount_percentage}%</h4>
       </div>
