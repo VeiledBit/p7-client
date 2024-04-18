@@ -5,11 +5,21 @@
   display: grid;
   grid-template-rows: 0.5fr 232px 1fr 0.5fr 0.5fr;
   grid-template-columns: repeat(4, 1fr);
+  transition: all 0.1s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: scale(1);
+  background-color: white;
+}
+
+.saleItem:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
 }
 
 .imageProduct {
   width: 200px;
   height: 200px;
+  cursor: pointer;
 }
 
 .item0 {
@@ -82,8 +92,8 @@
 
 .iconFavorite {
   position: absolute;
-  top: 1.30rem;
-  left: 5.5rem;
+  top: 1.3rem;
+  right: 5.25rem;
   color: red;
 }
 

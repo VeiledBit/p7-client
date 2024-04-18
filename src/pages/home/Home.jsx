@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import {
+  Alert,
   Box,
   Button,
   Checkbox,
@@ -15,9 +16,12 @@ import {
   Divider,
   FormControlLabel,
   FormGroup,
+  IconButton,
+  Snackbar,
   Switch,
   TextField,
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import supabase from "../../config/supabase";
 import baseUrl from "../../config/url";
 import AuthModal from "../../components/Auth";
@@ -43,6 +47,9 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [isSpinnerLoadingShown, setIsSpinnerLoadingShown] = useState(true);
   const [isBtnLoadMoreShown, setIsBtnLoadMoreShown] = useState(false);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState();
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackBarSeverity, setSnackbarSeverity] = useState("info");
   let delayTimer;
 
   useEffect(() => {
@@ -226,6 +233,31 @@ export default function Home() {
       .catch();
   };
 
+  const handleOpenSnackbar = () => {
+    setIsSnackbarOpen(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setIsSnackbarOpen(false);
+  };
+
+  const action = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleCloseSnackbar}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
+
   return (
     <>
       <Navbar handleLogin={handleLogin} btnLoginText={btnLoginText} />
@@ -358,6 +390,9 @@ export default function Home() {
                 img_url={item.img_url}
                 note={item.note}
                 isFavored={item.isFavored}
+                handleOpenSnackbar={handleOpenSnackbar}
+                setSnackbarMessage={setSnackbarMessage}
+                setSnackbarSeverity={setSnackbarSeverity}
               />
             ))}
           </>
@@ -389,6 +424,21 @@ export default function Home() {
           Učitaj još
         </Button>
       )}
+      <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+        action={action}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackBarSeverity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 }

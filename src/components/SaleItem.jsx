@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import LogoStore from "./LogoStore";
 import styles from "./SaleItem.module.css";
@@ -32,6 +31,9 @@ export default function SaleItem({
   img_url,
   note,
   isFavored,
+  handleOpenSnackbar,
+  setSnackbarMessage,
+  setSnackbarSeverity,
 }) {
   const [isFavoredState, setIsFavoredState] = useState();
   const dateStart = new Date(sale_start_date);
@@ -48,7 +50,7 @@ export default function SaleItem({
   }, [isFavored]);
 
   const handleFavorite = async () => {
-    const { data, error } = await supabase.auth.getSession();
+    const { data } = await supabase.auth.getSession();
     if (data.session !== null) {
       axios
         .put(
@@ -61,10 +63,22 @@ export default function SaleItem({
           }
         )
         .then((response) => {
-          if (response.status === 200 || response.status === 201) {
+          if (response.status === 200) {
             setIsFavoredState(!isFavoredState);
+            setSnackbarMessage("Proizvod uklonjen iz omiljenih.");
+            setSnackbarSeverity("success");
+            handleOpenSnackbar();
+          } else if (response.status === 201) {
+            setIsFavoredState(!isFavoredState);
+            setSnackbarMessage("Proizvod sačuvan u omiljene.");
+            setSnackbarSeverity("success");
+            handleOpenSnackbar();
           }
         });
+    } else {
+      setSnackbarMessage("Ulogujte se da bi ste sačuvali proizvod u omiljene.");
+      setSnackbarSeverity("warning");
+      handleOpenSnackbar();
     }
   };
 
