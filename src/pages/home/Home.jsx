@@ -140,7 +140,7 @@ export default function Home() {
     };
 
     setUpSession();
-  }, [isSearchAllStoresChecked, store, search, sort, categories]);
+  }, [isSearchAllStoresChecked, store, search, sort, categories, session]);
 
   const handleChange = (event) => {
     setStore(event.target.value);
