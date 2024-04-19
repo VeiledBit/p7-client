@@ -282,6 +282,7 @@ export default function Home() {
             label="selectStore"
           >
             <MenuItem value="maxi">Maxi</MenuItem>
+            <MenuItem value="lidl">Lidl</MenuItem>
             <MenuItem value="elakolije">Univerexport</MenuItem>
           </Select>
         </FormControl>
@@ -298,12 +299,19 @@ export default function Home() {
             <MenuItem value="discountLowest">Najnizi popust</MenuItem>
             <MenuItem value="priceLowest">Najniza cena</MenuItem>
             <MenuItem value="priceHighest">Najveca cena</MenuItem>
-            <MenuItem value="pricePerUnitLowest">
-              Najniza cena po jednicnoj meri
-            </MenuItem>
-            <MenuItem value="pricePerUnitHighest">
-              Najveca cena po jednicnoj meri
-            </MenuItem>
+            {store !== "lidl"
+              ? [
+                  <MenuItem key="pricePerUnitLowest" value="pricePerUnitLowest">
+                    Najniza cena po jednicnoj meri
+                  </MenuItem>,
+                  <MenuItem
+                    key="pricePerUnitHighest"
+                    value="pricePerUnitHighest"
+                  >
+                    Najveca cena po jednicnoj meri
+                  </MenuItem>,
+                ]
+              : null}
           </Select>
         </FormControl>
         <FormControl

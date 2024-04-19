@@ -85,9 +85,14 @@ export default function SaleItem({
   return (
     <div className={styles.saleItem}>
       <LogoStore storeName={store} />
-      <h4 className={styles.item1}>{`${formattedDate(
-        dateStart
-      )}-${formattedDate(dateEnd)}`}</h4>
+      {sale_end_date !== null && (
+        <h4 className={styles.item1}>{`${formattedDate(
+          dateStart
+        )}-${formattedDate(dateEnd)}`}</h4>
+      )}
+      {sale_end_date === null && (
+        <h4 className={styles.item1}>{`od ${formattedDate(dateStart)}`}</h4>
+      )}
       <div className={styles.item2}>
         {store === "maxi" &&
           typeof note !== "undefined" &&
@@ -133,8 +138,14 @@ export default function SaleItem({
         ) : (
           <></>
         )}
-        <img className={styles.imageWoodSign} src={hangingSign} />
-        <h4 className={styles.discountPercentage}>-{discount_percentage}%</h4>
+        {discount_percentage !== null && discount_percentage !== 0 && (
+          <>
+            <img className={styles.imageWoodSign} src={hangingSign} />
+            <h4 className={styles.discountPercentage}>
+              -{discount_percentage}%
+            </h4>
+          </>
+        )}
       </div>
       <h3 className={styles.item3}>{name}</h3>
       <h2
